@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
 
+        // Percayai semua proxy Vercel agar HTTPS dan cookie aman terbaca
+        $middleware->trustProxies(at: '*');
+
         // Daftarkan Alias Middleware Spatie Laravel Permission
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
