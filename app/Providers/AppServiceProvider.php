@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate; // Pastikan facade ini di-import
 use App\Models\Peminjaman;          // Tambahkan import Model Peminjaman
 use App\Policies\PeminjamanPolicy;  // Tambahkan import Policy
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // <-- 2. Tambahkan baris ini agar Laravel memaksa HTTPS di Vercel
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
         // Daftarkan Policy Peminjaman untuk soal nomor 4
         Gate::policy(Peminjaman::class, PeminjamanPolicy::class);
 
