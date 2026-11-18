@@ -13,10 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->statefulApi();
-
         // Percayai semua proxy Vercel agar HTTPS dan cookie aman terbaca
         $middleware->trustProxies(at: '*');
+
+        $middleware->statefulApi();
 
         // Daftarkan Alias Middleware Spatie Laravel Permission
         $middleware->alias([
