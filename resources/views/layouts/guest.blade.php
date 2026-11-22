@@ -19,12 +19,14 @@
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-100">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+            <div class="flex flex-col items-center">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" style="height: 50px; width: auto;" />
+                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
                 </a>
-            </div>
-
+                <p class="mt-2 text-center text-sm font-semibold text-gray-700">
+                        250441100115
+                    </p>
+                </div>
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
