@@ -120,20 +120,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/siswa/pinjam/{buku}', [SiswaPeminjamanController::class, 'store'])->name('siswa.pinjam'); // Atau method 'store'/'pinjam'
 });
 
-    Route::get('/test-debug', function () {
+Route::get('/test-debug', function () {
     throw new \RuntimeException('Uji coba debug error');
+});
 
-
-    Route::get('/cek-session', function () {
+Route::get('/cek-session', function () {
     return response()->json([
         'app_key_set' => !empty(config('app.key')),
         'session_driver' => config('session.driver'),
         'session_secure' => config('session.secure'),
         'session_domain' => config('session.domain'),
     ]);
-});
-
-
 });
 
 

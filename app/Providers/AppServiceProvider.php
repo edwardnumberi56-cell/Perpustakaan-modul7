@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // <-- 2. Tambahkan baris ini agar Laravel memaksa HTTPS di Vercel
-        if (config('app.env') === 'production') {
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
         // Daftarkan Policy Peminjaman untuk soal nomor 4
