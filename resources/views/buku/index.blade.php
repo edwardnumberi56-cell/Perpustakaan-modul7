@@ -229,13 +229,22 @@
         try {
             let response = await fetch(`${API_URL}/${id}`, {
                 method: 'DELETE',
+                credentials: 'same-origin',
                 headers: {
                     'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                 }
             });
 
-            let result = await response.json();
+            let rawText = await response.text();
+            let result = {};
+            try {
+                result = rawText ? JSON.parse(rawText) : {};
+            } catch (e) {
+                throw new Error(`Respon bukan JSON (HTTP ${response.status}).`);
+            }
+
             if (!response.ok) throw new Error(result.message || 'Gagal menghapus data.');
 
             loadBuku(); 
@@ -271,15 +280,23 @@
         try {
             let response = await fetch(url, {
                 method: method,
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                 },
                 body: JSON.stringify(payload)
             });
 
-            let result = await response.json();
+            let rawText = await response.text();
+            let result = {};
+            try {
+                result = rawText ? JSON.parse(rawText) : {};
+            } catch (e) {
+                throw new Error(`Respon bukan JSON (HTTP ${response.status}). Kemungkinan sesi habis (419), akses ditolak (403), atau route API bermasalah.`);
+            }
 
             if (response.status === 422) {
                 let errorMessages = '';
@@ -291,7 +308,7 @@
             }
 
             if (!response.ok) {
-                throw new Error(result.message || 'Terjadi kesalahan saat menyimpan data.');
+                throw new Error(result.message || `Terjadi kesalahan saat menyimpan data (HTTP ${response.status}).`);
             }
 
             alert(id ? 'Buku berhasil diperbarui!' : 'Buku berhasil ditambahkan!');
