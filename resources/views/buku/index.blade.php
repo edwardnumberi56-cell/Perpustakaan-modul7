@@ -320,6 +320,16 @@
         }
     });
 
+    if (judul.trim().length < 3) {
+    alert('Validasi Gagal:\nJudul buku minimal 3 karakter!');
+    return;
+    }
+
+    if (penulis.trim().length < 3) {
+        alert('Validasi Gagal:\nNama penulis minimal 3 karakter!');
+        return;
+    }
+
     document.addEventListener('DOMContentLoaded', loadBuku);
 </script>
 @endsection

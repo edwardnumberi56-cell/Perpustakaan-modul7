@@ -57,8 +57,8 @@ class BukuController extends Controller
         // Validasi input data yang dikirim dari form edit
         $request->validate([
             'kategori_id' => 'required|integer',
-            'judul' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
+            'judul' => 'required|string|min:3|max:255',
+            'penulis' => 'required|string|min:3|max:255',
             'tahun_terbit' => 'required|integer|max:2026',
         ]);
 
