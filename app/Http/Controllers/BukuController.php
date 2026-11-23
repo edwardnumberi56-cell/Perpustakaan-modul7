@@ -20,7 +20,10 @@ class BukuController extends Controller
             $bukus = DB::select("SELECT * FROM bukus");
         }
 
-        return view('buku.index', compact('bukus'));
+        // Tambahan: ambil data kategori langsung dari tabel kategoris di database
+        $kategoris = DB::table('kategoris')->orderBy('id')->get(); //[cite: 4]
+
+        return view('buku.index', compact('bukus', 'kategoris'));
     }
 
     public function cari(Request $request)

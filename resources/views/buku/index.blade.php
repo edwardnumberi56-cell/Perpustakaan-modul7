@@ -29,6 +29,17 @@
                         <input type="number" class="form-control" id="kategori_id" required>
                     </div>
 
+                    {{-- Tambahan: dropdown Kategori langsung dari tabel kategoris --}}
+                    <div class="mb-3">
+                        <label for="kategori_id" class="form-label">Kategori</label>
+                        <select class="form-control" id="kategori_id" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach($kategoris ?? [] as $kategori)
+                                <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="judul" class="form-label">Judul Buku</label>
                         <input type="text" class="form-control" id="judul" required>
