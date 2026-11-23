@@ -37,28 +37,20 @@ class BukuController extends Controller
     }
 
     // A3: Method destroy untuk menghapus buku
-    public function destroy($buku)
+    public function destroy(Request $request, $buku)
     {
         $bukuModel = Buku::findOrFail($buku);
         $bukuModel->delete();
 
-        return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus.');
-    }
-
-    // RENTAN A4: Mengambil data berdasarkan ID tanpa mengecek hak akses / kepemilikan
-    public function edit($id)
-    {
-        $bukus = DB::select("SELECT * FROM bukus WHERE id = ?", [$id]);
-        
-        // Ambil data pertama dari array hasil select
-        $buku = $bukus[0] ?? null;
-
-        if (!$buku) {
-            abort(404, 'Data buku tidak ditemukan.');
+        if ($request->expectsJson() || $request->ajax() || $request->is('api/*')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Buku berhasil dihapus.'
+            ]);
         }
 
-        return view('buku.edit', compact('buku'));
-    }    
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus.');
+    }
 
     public function update(Request $request, $id)
     {
@@ -81,41 +73,49 @@ class BukuController extends Controller
                 $id
             ]
         );
+        
+        // A3: Method destroy untuk menghapus buku
+        if ($request->expectsJson() || $request->ajax() || $request->is('api/*')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data buku berhasil diperbarui!'
+            ]);
+        }
 
         // Redirect kembali ke halaman daftar buku dengan pesan sukses
         return redirect()->route('buku.index')->with('success', 'Data buku berhasil diperbarui!');
     }
 
-    
     public function store(Request $request)
-{
-    // Validasi input data
-    $request->validate([
-        'kategori_id' => 'required|integer',
-        'judul' => 'required|string|max:255',
-        'penulis' => 'required|string|max:255',
-        'tahun_terbit' => 'required|integer|max:2026',
-    ]);
+    {
+        // Validasi input data
+        $request->validate([
+            'kategori_id' => 'required|integer',
+            'judul' => 'required|string|max:255',
+            'penulis' => 'required|string|max:255',
+            'tahun_terbit' => 'required|integer|max:2026',
+        ]);
 
-    // Proses insert menggunakan Raw SQL
-    DB::insert(
-        "INSERT INTO bukus (kategori_id, judul, penulis, tahun_terbit, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())",
-        [
-            $request->kategori_id,
-            $request->judul,
-            $request->penulis,
-            $request->tahun_terbit
-        ]
-    );
+        // Proses insert menggunakan Raw SQL
+        DB::insert(
+            "INSERT INTO bukus (kategori_id, judul, penulis, tahun_terbit, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())",
+            [
+                $request->kategori_id,
+                $request->judul,
+                $request->penulis,
+                $request->tahun_terbit
+            ]
+        );
 
-    return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan!');
+        if ($request->expectsJson() || $request->ajax() || $request->is('api/*')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Buku berhasil ditambahkan!'
+            ], 201);
+        }
 
-    // return response()->json([
-    //     'success' => true,
-    //     'message' => 'Buku berhasil ditambahkan!'
-    // ], 201);
-}
-
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan!');
+    }
 
 
 // TARUH METHOD CETAK LAPORAN DI SINI:
