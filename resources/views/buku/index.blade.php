@@ -37,11 +37,13 @@
                     <div class="mb-3">
                         <label for="judul" class="form-label">Judul Buku</label>
                         <input type="text" class="form-control" id="judul" required>
+                        <small id="notif-judul" class="text-danger d-none"></small>
                     </div>
 
                     <div class="mb-3">
                         <label for="penulis" class="form-label">Penulis</label>
                         <input type="text" class="form-control" id="penulis" required>
+                        <small id="notif-penulis" class="text-danger d-none"></small>
                     </div>
 
                     <div class="mb-3">
@@ -203,6 +205,8 @@
     function resetForm() {
         let form = document.getElementById('buku-form');
         if (form) form.reset();
+        document.getElementById('notif-judul')?.classList.add('d-none');
+        document.getElementById('notif-penulis')?.classList.add('d-none');
         let bukuId = document.getElementById('buku-id');
         if (bukuId) bukuId.value = '';
         let formTitle = document.getElementById('form-title');
@@ -262,6 +266,23 @@
         let penulis = document.getElementById('penulis').value;
         let tahun_terbit = parseInt(document.getElementById('tahun_terbit').value);
 
+        let notifJudul = document.getElementById('notif-judul');
+        let notifPenulis = document.getElementById('notif-penulis');
+        notifJudul.classList.add('d-none');
+        notifPenulis.classList.add('d-none');
+
+        if (judul.trim().length < 3) {
+            notifJudul.innerText = 'Judul buku minimal 3 karakter.';
+            notifJudul.classList.remove('d-none');
+            return;
+        }
+
+        if (penulis.trim().length < 3) {
+            notifPenulis.innerText = 'Nama penulis minimal 3 karakter.';
+            notifPenulis.classList.remove('d-none');
+            return;
+        }
+
         if (tahun_terbit > 2026) {
             alert('Validasi Gagal:\nTahun terbit tidak boleh lebih dari tahun 2026!');
             return; 
@@ -319,16 +340,6 @@
             alert('Kesalahan: ' + error.message);
         }
     });
-
-    if (judul.trim().length < 3) {
-    alert('Validasi Gagal:\nJudul buku minimal 3 karakter!');
-    return;
-    }
-
-    if (penulis.trim().length < 3) {
-        alert('Validasi Gagal:\nNama penulis minimal 3 karakter!');
-        return;
-    }
 
     document.addEventListener('DOMContentLoaded', loadBuku);
 </script>
