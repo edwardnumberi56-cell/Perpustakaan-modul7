@@ -32,7 +32,16 @@
             @foreach($laporans as $index => $l)
             <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ $l->anggota->nama ?? $l->user->name ?? '-' }}</td>
+                <td>
+                    {{ $l->anggota->name
+                        ?? $l->anggota->nama
+                        ?? $l->user->name
+                        ?? $l->user->nama
+                        ?? $l->siswa->name
+                        ?? $l->siswa->nama
+                        ?? $l->nama_anggota
+                        ?? '-' }}
+                </td>
                 <td>{{ $l->buku->judul_buku ?? $l->buku->judul ?? '-' }}</td>
                 <td>{{ $l->tanggal_pinjam }}</td>
                 <td>{{ $l->tanggal_kembali ?? 'Belum Dikembalikan' }}</td>

@@ -32,10 +32,20 @@ class Peminjaman extends Model
     // --- TAMBAHAN DI BAWAH INI (TANPA MENGUBAH KODE LAMA) ---
     public function getNamaAnggotaAttribute()
     {
-        if (!$this->anggota) {
-            return '-';
+        if ($this->anggota) {
+            return $this->anggota->name ?? $this->anggota->nama ?? '-';
         }
-        
-        return $this->anggota->nama ?? $this->anggota->nama ?? '-';
+
+        if ($this->anggota_id) {
+            $anggotaTabel = \Illuminate\Support\Facades\DB::table('anggotas')
+                ->where('id', $this->anggota_id)
+                ->first();
+
+            if ($anggotaTabel) {
+                return $anggotaTabel->nama ?? $anggotaTabel->name ?? '-';
+            }
+        }
+
+        return '-';
     }
 }
