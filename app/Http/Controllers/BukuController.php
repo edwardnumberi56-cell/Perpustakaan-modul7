@@ -21,9 +21,20 @@ class BukuController extends Controller
         }
 
         // Tambahan: ambil data kategori langsung dari tabel kategoris di database
-        $kategoris = DB::table('kategoris')->orderBy('id')->get(); //[cite: 4]
+        $kategoris = DB::table('kategoris')->orderBy('id')->get();
 
         return view('buku.index', compact('bukus', 'kategoris'));
+    }
+
+    public function edit($buku)
+    {
+        $bukuModel = Buku::findOrFail($buku);
+        $kategoris = DB::table('kategoris')->orderBy('id')->get();
+
+        return view('buku.edit', [
+            'buku' => $bukuModel,
+            'kategoris' => $kategoris,
+        ]);
     }
 
     public function cari(Request $request)
