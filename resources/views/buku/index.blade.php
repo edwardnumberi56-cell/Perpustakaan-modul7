@@ -84,7 +84,7 @@
                             @foreach($bukus as $index => $buku)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $buku->kategori->nama_kategori ?? $buku->kategori_id }}</td>
+                                    <td>{{ $buku->kategori->nama ?? $buku->kategori->nama_kategori ?? $buku->kategori_id ?? '-' }}</td>
                                     <td>{{ $buku->judul }}</td>
                                     <td>{{ $buku->penulis }}</td>
                                     <td>{{ $buku->tahun_terbit }}</td>
@@ -124,6 +124,13 @@
         auth()->user()->hasRole('petugas')
     );
 
+    const kategoriMap = {};
+    document.querySelectorAll('#kategori_id option').forEach(opt => {
+        if (opt.value) {
+            kategoriMap[String(opt.value)] = opt.textContent.trim();
+        }
+    });
+
     function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
@@ -155,7 +162,11 @@
             }
 
             data.forEach((buku, index) => {
-                let kategori = buku.kategori?.nama_kategori ?? buku.kategori?.nama ?? buku.kategori_id ?? '-';
+                let kategori = buku.kategori?.nama
+                    ?? buku.kategori?.nama_kategori
+                    ?? kategoriMap[String(buku.kategori_id)]
+                    ?? buku.kategori_id
+                    ?? '-';
                 let judul = buku.judul_buku ?? buku.judul ?? '-';
                 let penulis = buku.penulis ?? '-';
                 let tahun = buku.tahun ?? buku.tahun_terbit ?? '-';
